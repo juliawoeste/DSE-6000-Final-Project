@@ -19,9 +19,12 @@ Alternative; You can also clone your repository from the home directory, using g
 
 This will create a directory 'dash-gcp-template' and will download all the files from the git repository
 
-4. Cd to home directory and run the below command
+4. Cd to home directory and run the below commands:
+    `pip install setuptools`
 
 	`pip install -r ./dash-gcp-template/requirements.txt`
+
+	`pip install dash==2.16.1 plotly-express==0.4.1`
 
 5. After all the packages are downloaded, cd to 'dash-gcp-template' folder start the app using the command below:
 

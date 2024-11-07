@@ -1,6 +1,6 @@
 # Steps to follow
 
-1. Open Google Cloud Shell
+1. Open Google Cloud Shell at https://console.cloud.google.com/
 
 	In your home directory create a virtual environment using the command below
 

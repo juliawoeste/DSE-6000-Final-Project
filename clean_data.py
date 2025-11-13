@@ -56,11 +56,37 @@ df['reference_prevalence_num'].fillna(df['reference_prevalence_num'].median(), i
 df['disparity_value_num'].fillna(df['disparity_value_num'].median(), inplace=True)
 
 #should we get rid of the tobacco use column since its all the same values?? 
-#get rid of "age" before the age number 
+df = df.drop(["tobacco_use"], axis=1)
+
+#get rid of "age" before the age number, change "65 or older" to 65+ 
+df['comparing_focus_group'] = df['comparing_focus_group'].str.replace("Age ", "", regex=False)
+df['to_reference_group'] = df['to_reference_group'].str.replace("Age ", "", regex=False)
+
+
+df['comparing_focus_group'] = df['comparing_focus_group'].str.replace("65 or older", "65+", case=False)
+df['to_reference_group'] = df['to_reference_group'].str.replace("65 or older", "65+", case=False)
+
+
+#Get rid of $ and , for income
+df['comparing_focus_group'] = df['comparing_focus_group'].str.replace("$", "", regex=False).str.replace(",", "", regex=False)
+df['to_reference_group'] = df['to_reference_group'].str.replace("$", "", regex=False).str.replace(",", "", regex=False)
+
+#change less than, from and or above
+df['comparing_focus_group'] = df['comparing_focus_group'].replace({
+    "Less than 20000": "<20000",
+    "From 20000-74999": "20000-74999",
+    "75000 or above": ">=75000"
+})
+
+df['to_reference_group'] = df['to_reference_group'].replace({
+    "Less than 20000": "<20000",
+    "From 20000-74999": "20000-74999",
+    "75000 or above": ">=75000"
+})
+
 #split up employed or self and student or homemaker
-#Change 65 or older 
-#get rid of From and $ in income and less than or above- just make it a number? 
 #get rid of non-hispanic in front of other ethnicties 
+
 
 #creates a new csv file with cleaned data 
 output_path = "data/cleaned_data.csv"

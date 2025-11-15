@@ -85,7 +85,15 @@ df['to_reference_group'] = df['to_reference_group'].replace({
 })
 
 #split up employed or self and student or homemaker
+df['comparing_focus_group'] = df['comparing_focus_group'].str.replace("Homemaker or Student", "Homemaker/Student", regex=False)
+df['to_reference_group'] = df['to_reference_group'].str.replace("Homemaker or Student", "Homemaker/Student", regex=False)
+df['comparing_focus_group'] = df['comparing_focus_group'].str.replace("Employed or Self", "Employed/Self", regex=False)
+df['to_reference_group'] = df['to_reference_group'].str.replace("Employed or Self", "Employed/Self", regex=False)
+
+
 #get rid of non-hispanic in front of other ethnicties 
+df['comparing_focus_group'] = df['comparing_focus_group'].str.replace("Non-Hispanic ", "", regex=False)
+df['to_reference_group'] = df['to_reference_group'].str.replace("Non-Hispanic ", "", regex=False)
 
 
 #creates a new csv file with cleaned data 

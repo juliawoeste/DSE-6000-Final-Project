@@ -5,7 +5,8 @@ import plotly.express as px
 import pandas as pd
 from diagrams.diagram2 import smoking_disparity_vs_income
 from diagrams.diagram8 import top10_lowest_avg_disparity
-
+from diagrams.diagram6 import facet_line_disparity_by_demographic
+from diagrams.diagram1 import avg_disparity_by_demographic_bar
 
 
 app = dash.Dash(__name__)
@@ -81,6 +82,48 @@ app.layout = html.Div([
     #     id='example-graph2',
     #     figure=fig2
     # )
+
+    html.H2("Smoking Disparities Across Demographic Groups"),
+
+    # 1) Facet line chart: trends over time by demographic
+    dcc.Graph(
+        id="facet-demographic-trends",
+        figure=facet_line_disparity_by_demographic()
+    ),
+    html.H4("Interpretation"),
+    html.Div("""
+        The facet line chart basically shows how smoking disparities have changed 
+        from 2011 to 2023 across different demographic groups — things like Age, Income, 
+        Employment status, Mental Health, and Race/Ethnicity.
+        One thing that stands out right away is that the Employment group almost always has the 
+        biggest gap. Its values mostly sit in the mid-1.3 range, so the people in the focus groups for
+        employment-related categories tend to smoke quite a bit more than their comparison group. On the 
+        other hand, Race and Ethnicity has the smallest disparities (usually around 1.06–1.09), so those gaps 
+        are much smaller. Every line stays over 1, so that means there is some level of disparity in 
+        every group, even if the size of the gap differs. Employment and Income have the strongest disparities,
+        while Race/Ethnicity is consistently the lowest. There are a few little changes year to year, but nothing 
+        big or dramatic — for the most part looks like these disparities have been hanging around rather than getting much 
+        better or worse.
+    """),
+
+    # 2) Bar chart: overall average disparity by demographic
+    dcc.Graph(
+        id="avg-disparity-by-demographic",
+        figure=avg_disparity_by_demographic_bar()
+    ),
+    html.H4("Interpretation"),
+    html.Div("""
+    This bar chart basically shows the average smoking gap for different groups
+    across all the states and years, and a couple things stand out right away. The Employment group
+    is easily the biggest one — it’s sitting around 1.40, which is noticeably higher than 
+    everything else. Income and Age are next, somewhere in the low 1.20s. Mental Health drops a bit below that,
+    and Race/Ethnicity is the smallest gap of the bunch, roughly around 1.08. 
+    Since 1 means the two groups smoke at the same rate, anything above that means the focus group is smoking more. 
+    So seeing Employment that high feels like there’s something more going on there than just random variation. Overall, 
+    the biggest differences show up when you look at whether someone’s working, how much they make, or what age range they 
+    fall into. The racial and ethnic differences exist, but they’re not nearly as big in this dataset. If anything, it makes one think 
+    public health programs might get more traction by focusing on unemployed folks, lower-income groups, and some age categories where the gap is clearly wider.
+    """)
 ])
 
 if __name__ == '__main__':

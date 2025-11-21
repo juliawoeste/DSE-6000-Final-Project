@@ -7,6 +7,8 @@ from diagrams.diagram2 import smoking_disparity_vs_income
 from diagrams.diagram8 import top10_lowest_avg_disparity
 from diagrams.diagram6 import facet_line_disparity_by_demographic
 from diagrams.diagram1 import avg_disparity_by_demographic_bar
+from diagrams.dezi_histogram import histogram_prevalence
+from diagrams.dezi_choropleth import mental_disparity
 
 
 app = dash.Dash(__name__)
@@ -60,7 +62,39 @@ app.layout = html.Div([
         Although all ten states still have disparity values above 1, the narrow range between them (approximately 1.14–1.18) suggests that demographic gaps in smoking behavior are modest compared with the rest of the United States.
         These lower disparity levels may reflect more uniform access to public health resources, fewer socioeconomic divides, or more consistent tobacco-related risk factors within these states.
         Overall, these states represent the top ten in the United States with the lowest average smoking disparity values, demonstrating more equitable smoking outcomes and smaller gaps between focus groups and reference groups across demographic categories.
-    '''),
+    '''), 
+
+# What is the distribution of smoker prevalence across all demographics from 2011–2023?
+
+dcc.Graph(
+    id="histogram-prevalence-graph",
+    figure=histogram_prevalence()
+),
+html.H4("Interpretation"),
+html.Div('''
+    These graphs show the distribution of the percentages of smokers across all demographics from 2011–2023. 
+    On average we can see that 15–19.9% of all demographics were smokers. The percentage bins larger than 15–19.9% 
+    seem to be significantly lower. We begin to see change in the percentages from 2021–2023 where we see a large 
+    increase in the percentages of 5–14.99%, and a decrease in the 15–19.9%. This would mean that within the past 
+    few years we have seen an overall decrease in the amount of smokers across all of the focus groups.
+'''),
+
+# How has smoking disparity changed between 'High Distress' and 'No Distress' mental groups across states from 2011–2023?
+
+dcc.Graph(
+    id="mental-disparity-choropleth",
+    figure=mental_disparity()
+),
+html.H4("Interpretation"),
+html.Div('''
+    This choropleth shows the smoking disparity between "High Distress" and "No Distress" mental groups across all 
+    states from 2011–2023. The year slider allows one to compare the disparity rates between years. We see large 
+    disparities between the years of 2013–2015 with a slight drop off after that. This then reaches the largest 
+    disparity spread in the country in 2019, with a huge drop off in disparity during COVID/quarantine in 2020. 
+    One could begin to theorize whether the time off from work during quarantine could have contributed to the 
+    narrowing of disparity between these two mental-health groups.
+'''),
+
 
 
     # html.H1('Hello'),

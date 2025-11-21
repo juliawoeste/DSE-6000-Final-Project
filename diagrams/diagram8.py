@@ -27,6 +27,10 @@ def top10_lowest_avg_disparity():
         color_continuous_scale="Blues"
     )
 
+    y_min = lowest10["disparity_value_num"].min()
+    y_max = lowest10["disparity_value_num"].max()
+    fig.update_yaxes(range=[y_min - 0.01, y_max + 0.01])
+
     fig.update_layout(
         xaxis_tickangle=-45,
         coloraxis_showscale=False

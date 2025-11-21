@@ -56,6 +56,7 @@ app.layout = html.Div([
     html.H4("Interpretation"),
      html.Div('''
         The chart, Top 10 States with Lowest Average Smoking Disparity, shows the ten U.S. states with the smallest differences in smoking rates between demographic groups from 2011–2023. 
+        The y-axis has been scaled to a narrower range to make the small differences between states more visually distinguishable.
         A disparity value above 1 indicates that adults in the focus group smoke cigarettes at a higher rate than the reference group, so values just slightly above 1 reflect only small differences in smoking prevalence. 
         Even though all of the values on this chart are slightly above 1, these are the ten states with the smallest disparities in the entire country. This indicates that gaps in smoking rates between demographic groups (Income, Race/Ethnicity, Age, Employment and Mental Health) are relatively small in these states.
         Nevada exhibits the lowest average disparity at approximately 1.14, suggesting that smoking behavior is more uniform across demographic groups in the state, meaning no demographic group smokes at dramatically higher rates than its comparison group. 

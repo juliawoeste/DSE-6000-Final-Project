@@ -3,7 +3,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-def corr_matrix_plotly():
+def corr_matrix():
     df = pd.read_csv("data/cleaned_data.csv")
 
     # Correlation Matrix 

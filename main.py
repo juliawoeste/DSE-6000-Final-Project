@@ -1,6 +1,5 @@
 import dash
-from dash import dcc
-from dash import html
+from dash import dcc, html, Input, Output, State
 import plotly.express as px
 import pandas as pd
 from diagrams.diagram2 import smoking_disparity_vs_income
@@ -9,6 +8,7 @@ from diagrams.diagram6 import facet_line_disparity_by_demographic
 from diagrams.diagram1 import avg_disparity_by_demographic_bar
 from diagrams.dezi_histogram import histogram_prevalence
 from diagrams.dezi_choropleth import mental_disparity
+from diagrams.ml import (best_model, focus_encoder, ref_encoder, focus_groups, reference_groups)
 
 
 app = dash.Dash(__name__)
@@ -158,8 +158,72 @@ html.Div('''
     the biggest differences show up when you look at whether someone’s working, how much they make, or what age range they 
     fall into. The racial and ethnic differences exist, but they’re not nearly as big in this dataset. If anything, it makes one think 
     public health programs might get more traction by focusing on unemployed folks, lower-income groups, and some age categories where the gap is clearly wider.
-    """)
-])
+    """),
 
-if __name__ == '__main__':
-    app.run_server(debug=True, port=8080)
+
+html.H3('Predicting Smoking Disparity'),
+
+html.Div([html.Label('Focus Group'), dcc.Dropdown(
+    id='focus-group-input', 
+    options=[{'label':g, 'value':g} for g in focus_groups],
+    placeholder='Select Focus Group', 
+    style={'width':'60%'}), 
+]),
+
+
+html.Div([html.Label('Reference Group'), dcc.Dropdown(
+    id='ref-group-input',
+    options=[{'label':g, 'value':g} for g in reference_groups],
+    placeholder='Select Reference Group', 
+    style={'width':'60%'}),
+]), 
+
+html.Div([html.Label('Focus Prevalence %'), dcc.Input(
+    id='focus-prev-input', 
+    type='number', 
+    placeholder='ex: 15.5', 
+    style={'width':'30%'}),
+
+]),
+
+html.Div([html.Label('Reference Prevalence %'), dcc.Input(
+    id='ref-prev-input',
+    type='number',
+    placeholder='ex: 10.0', 
+    style={'width': '30%'}), 
+
+]), 
+
+html.Button('Disparity Prediction', id='predict-button', n_clicks=0), 
+html.H4('Prediction Results:'),
+html.Div(id='prediction-output'), 
+
+])
+@app.callback(
+    Output('prediction-output', 'children'),
+    Input('predict-button', 'n_clicks'),
+    State('focus-group-input', 'value'), 
+    State('ref-group-input', 'value'), 
+    State('focus-prev-input', 'value'), 
+    State('ref-prev-input', 'value'), 
+) 
+def make_prediction(n_clicks, focus_group, ref_group, focus_prev, ref_prev): 
+    if n_clicks == 0:
+        return 'Please enter values and click the predict button'
+    if (
+        focus_group is None
+        or ref_group is None
+        or focus_prev is None
+        or ref_prev is None
+    ):
+        return 'Please fill in the fields' 
+    
+    focus_encoded = float(focus_encoder.transform([[focus_group]])[0][0])
+    ref_encoded = float(ref_encoder.transform([[ref_group]])[0][0])
+
+    X_new = [[focus_encoded, ref_encoded, float(focus_prev), float(ref_prev)]]
+    pred = best_model.predict(X_new)[0]
+    return f"Predicted disparity value: {pred:.2f}"
+
+if __name__ == '__main__':    
+    app.run(debug=True, port=8080)

@@ -12,7 +12,7 @@ def top_ten_groups():
         y="disparity_value_num",
         title="Top 10 Groups by Average Smoking Disparities",
         color="disparity_value_num",                 
-        color_continuous_scale="Rocket_r",
+        color_continuous_scale="viridis_r",
         text="disparity_value_num",
         labels={
             "comparing_focus_group": "Comparing Focus Group",

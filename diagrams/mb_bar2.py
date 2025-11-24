@@ -18,7 +18,7 @@ def bottom_ten_groups():
         y="disparity_value_num",
         title="Bottom 10 Groups by Average Smoking Disparities",
         color="disparity_value_num",
-        color_continuous_scale="IceFire",
+        color_continuous_scale="icefire",
         text="disparity_value_num",
         labels={
             "comparing_focus_group": "Comparing Focus Group",

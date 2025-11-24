@@ -1,36 +1,49 @@
 import pandas as pd
-import io
-import seaborn as sns
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 def top_ten_groups():
-  df = pd.read_csv('data/cleaned_data.csv')
-  
-  sd_by_focus = df.groupby('comparing_focus_group')['disparity_value_num'].mean().sort_values(ascending=False).head(10)
+    """
+    Returns a Plotly figure of the top 10 comparing focus groups
+    with the highest average smoking disparity.
+    """
+    df = pd.read_csv('data/cleaned_data.csv')
 
-  sns.set_theme(style="whitegrid", font_scale=1.25)
-  plt.figure(figsize=(12, 7))
+    # Compute top 10
+    sd_by_focus = (
+        df.groupby('comparing_focus_group')['disparity_value_num']
+        .mean()
+        .sort_values(ascending=False)
+        .head(10)
+        .reset_index()
+    )
 
-  palette = sns.color_palette("rocket_r", len(sd_by_focus))
+    fig = px.bar(
+        sd_by_focus,
+        x="comparing_focus_group",
+        y="disparity_value_num",
+        title="Top 10 Groups by Average Smoking Disparities",
+        color="disparity_value_num",                 # gives a gradient similar to seaborn rocket_r
+        color_continuous_scale="Rocket_r",
+        text="disparity_value_num",
+        labels={
+            "comparing_focus_group": "Comparing Focus Group",
+            "disparity_value_num": "Average Smoking Disparity",
+        },
+    )
 
+    # Mirror your labels above bars
+    fig.update_traces(
+        texttemplate="%{text:.2f}",
+        textposition="outside"
+    )
 
-  sd_focus_plot = sd_by_focus.plot.bar(color=palette, edgecolor='black', title='Top 10 Groups by Average Smoking Disparities')
-  sd_focus_plot.set_ylabel('Average Smoking Disparity')
-  sd_focus_plot.set_xlabel('Comparing Focus Group')
+    # Layout styling similar to seaborn version
+    fig.update_layout(
+        xaxis_tickangle=-45,
+        yaxis_title="Average Smoking Disparity",
+        xaxis_title="Comparing Focus Group",
+        margin=dict(l=40, r=40, t=80, b=80),
+        coloraxis_showscale=False,   # Hide colorbar if not needed
+    )
 
-  for i, v in enumerate(sd_by_focus):
-      sd_focus_plot.text(
-          i,
-          v + (0.02 * sd_by_focus.max()),
-          f"{v:.2f}",
-          ha="center",
-          va="bottom",
-          fontsize=12,
-          fontweight='bold'
-      )
-
-  plt.xticks(rotation=45, ha='right')
-  sd_focus_plot.grid(axis='y', linestyle='--', alpha=0.6)
-
-  plt.tight_layout()
-  plt.show()
+    return fig

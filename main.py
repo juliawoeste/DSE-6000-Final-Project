@@ -9,6 +9,9 @@ from diagrams.diagram1 import avg_disparity_by_demographic_bar
 from diagrams.dezi_histogram import histogram_prevalence
 from diagrams.dezi_choropleth import mental_disparity
 from diagrams.ml import (best_model, focus_encoder, ref_encoder, focus_groups, reference_groups)
+from diagrams.mb_bar1 import top_ten_groups
+from diagrams.mb_bar2 import bottom_ten_groups
+from diagrams.mb_corr1 import corr_matrix
 
 
 app = dash.Dash(__name__)

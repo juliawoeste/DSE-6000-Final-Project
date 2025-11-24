@@ -161,6 +161,49 @@ html.Div('''
     """),
 
 
+    # 3) Bar chart: top ten groups by average disparity
+    dcc.Graph(
+        id="avg-disparity-top-ten-groups",
+        figure=top_ten_groups()
+    ),
+    html.H4("Interpretation"),
+    html.Div("""
+    Employment has the highest average disparity among demographics, in large part, due to
+    people unable to work or who are unemployed having the largest disparities across categories.
+    Other factors like severe mental health and low socioeconomic status cause higher smoking disparities as well.
+    """),
+
+    # 4) Bar chart: bottom ten groups by average disparity
+    dcc.Graph(
+        id="avg-disparity-bottom-ten-groups",
+        figure=bottom_ten_groups()
+    ),
+    html.H4("Interpretation"),
+    html.Div("""
+    People who are retired have the lowest smoking disparity, followed by above average
+    income group (+$75K), people aged 65+, and Homemakers/students. This makes sense that these people have lower average smoking disparity
+    given that people are who retired or are older tend to think more about their health than younger or poorer people.
+    """),
+
+    # 5) Correlation Matrix: which categories are strongly correlated with each other?
+    dcc.Graph(
+        id="strong-correlation-matrix",
+        figure=corr_matrix()
+    ),
+    html.H4("Interpretation"),
+    html.Div("""
+    Employment:
+        Categories like "Unable to work" and "Retired" in both focus and reference groups have high correlations with each other 
+        and with disparity, which supports a previous finding that employment has high influence on disparity with respect to 
+        other groups.
+    Income Groups:
+        Categories ref_20K-75K and ref_<20K and ref_<20000 are positively correlated with each other and the disparity value.
+        On the other hand, the focus income group focus_>=75K show negative or weak correlation with disparity.
+        Lower income groups in the reference population seem to be associated with smaller disparities, as a result of higher 
+        smoking rates. In contrast, higher-income focus groups tend to have lower disparities.
+    """),
+
+    
 html.H3('Predicting Smoking Disparity'),
 
 html.Div([html.Label('Focus Group'), dcc.Dropdown(

@@ -1,39 +1,36 @@
-from google.colab import files
 import pandas as pd
 import io
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def avg_disparity_by_demographic_bar():
-    """
-    Bar chart:
-    - One bar per demographic group
-    - y = overall mean disparity_value_num across all states / years
-    """
-    df = pd.read_csv("data/cleaned_data.csv")
+def top_ten_groups():
+  df = pd.read_csv('data/cleaned_data.csv')
+  
+  sd_by_focus = df.groupby('comparing_focus_group')['disparity_value_num'].mean().sort_values(ascending=False).head(10)
 
-    grouped = (
-        df.groupby("demographic")["disparity_value_num"]
-        .mean()
-        .reset_index()
-        .sort_values("disparity_value_num", ascending=False)
-    )
+  sns.set_theme(style="whitegrid", font_scale=1.25)
+  plt.figure(figsize=(12, 7))
 
-    fig = px.bar(
-        grouped,
-        x="demographic",
-        y="disparity_value_num",
-        title="Average Smoking Disparity by Demographic Group (2011–2023)",
-        labels={
-            "demographic": "Demographic Group",
-            "disparity_value_num": "Average Smoking Disparity (Disparity Value)",
-        },
-    )
+  palette = sns.color_palette("rocket_r", len(sd_by_focus))
 
-    fig.update_layout(
-        xaxis_tickangle=-30,
-        hovermode="x",
-        margin=dict(l=40, r=40, t=80, b=80),
-    )
 
-    return fig
+  sd_focus_plot = sd_by_focus.plot.bar(color=palette, edgecolor='black', title='Top 10 Groups by Average Smoking Disparities')
+  sd_focus_plot.set_ylabel('Average Smoking Disparity')
+  sd_focus_plot.set_xlabel('Comparing Focus Group')
+
+  for i, v in enumerate(sd_by_focus):
+      sd_focus_plot.text(
+          i,
+          v + (0.02 * sd_by_focus.max()),
+          f"{v:.2f}",
+          ha="center",
+          va="bottom",
+          fontsize=12,
+          fontweight='bold'
+      )
+
+  plt.xticks(rotation=45, ha='right')
+  sd_focus_plot.grid(axis='y', linestyle='--', alpha=0.6)
+
+  plt.tight_layout()
+  plt.show()

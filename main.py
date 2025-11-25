@@ -12,6 +12,7 @@ from diagrams.ml import (best_model, focus_encoder, ref_encoder, focus_groups, r
 from diagrams.mb_bar1 import top_ten_groups
 from diagrams.mb_bar2 import bottom_ten_groups
 from diagrams.mb_corr1 import corr_matrix
+from diagrams.diagram4 import demographic_heatmap
 
 
 app = dash.Dash(__name__)
@@ -27,6 +28,7 @@ df = pd.DataFrame({
 fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 
 df2 = pd.read_csv('data/data.csv')
+df3 = pd.read_csv('data/cleaned_data.csv')
 
 fig2 = px.scatter(df2, x="gdp per capita", y="life expectancy",
                  size="population", color="continent", hover_name="country",
@@ -205,6 +207,21 @@ html.Div('''
         Lower income groups in the reference population seem to be associated with smaller disparities, as a result of higher 
         smoking rates. In contrast, higher-income focus groups tend to have lower disparities.
     """),
+    #4) Heatmap: State vs Year with Demographic dropdown
+    html.Div([
+        dcc.Dropdown(
+            id='demographic-dropdown', #heatmap_unique_demographics was defined here
+            options=[{'label': d, 'value': d} for d in heatmap_unique_demographics],
+            value=heatmap_unique_demographics[0],
+            clearable=False,
+            style={"width": "50%", "margin-bottom": "10px"},
+        ),
+    ]),
+    dcc.Graph(
+        id="demographic-heatmap",
+        figure=demographic_heatmap(heatmap_unique_demographics[0])
+    ),
+    html.H4("Interpretation"),
 
     
 html.H3('Predicting Smoking Disparity'),
@@ -243,8 +260,15 @@ html.Div([html.Label('Reference Prevalence %'), dcc.Input(
 html.Button('Disparity Prediction', id='predict-button', n_clicks=0), 
 html.H4('Prediction Results:'),
 html.Div(id='prediction-output'), 
-
 ])
+
+@app.callback(
+    Output('demographic-heatmap', 'figure'),
+    Input('demographic-dropdown', 'value')
+)
+def update_heatmap(selected_demographic):
+    return demographic_heatmap(selected_demographic)
+    
 @app.callback(
     Output('prediction-output', 'children'),
     Input('predict-button', 'n_clicks'),

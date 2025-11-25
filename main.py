@@ -29,6 +29,7 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 
 df2 = pd.read_csv('data/data.csv')
 df3 = pd.read_csv('data/cleaned_data.csv')
+heatmap_unique_demographics = sorted(df3['demographic'].unique())
 
 fig2 = px.scatter(df2, x="gdp per capita", y="life expectancy",
                  size="population", color="continent", hover_name="country",
@@ -208,15 +209,17 @@ html.Div('''
         smoking rates. In contrast, higher-income focus groups tend to have lower disparities.
     """),
     #4) Heatmap: State vs Year with Demographic dropdown
+    html.H3("State vs Year by Demographic Disparity Heatmap"),
     html.Div([
+        html.Label('Select Demographic:'),
         dcc.Dropdown(
             id='demographic-dropdown', #heatmap_unique_demographics was defined here
             options=[{'label': d, 'value': d} for d in heatmap_unique_demographics],
             value=heatmap_unique_demographics[0],
             clearable=False,
-            style={"width": "50%", "margin-bottom": "10px"},
+            style={'width': '40%'}
         ),
-    ]),
+    ], style={'marginTop': '30px'}),
     dcc.Graph(
         id="demographic-heatmap",
         figure=demographic_heatmap(heatmap_unique_demographics[0])
@@ -268,7 +271,7 @@ html.Div(id='prediction-output'),
 )
 def update_heatmap(selected_demographic):
     return demographic_heatmap(selected_demographic)
-    
+
 @app.callback(
     Output('prediction-output', 'children'),
     Input('predict-button', 'n_clicks'),

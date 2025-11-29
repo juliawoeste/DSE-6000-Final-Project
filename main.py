@@ -13,6 +13,7 @@ from diagrams.mb_bar1 import top_ten_groups
 from diagrams.mb_bar2 import bottom_ten_groups
 from diagrams.mb_corr1 import corr_matrix
 from diagrams.diagram4 import demographic_heatmap
+from diagrams.diagram5 import smoking_distribution_boxplot
 
 
 app = dash.Dash(__name__)
@@ -225,9 +226,52 @@ html.Div('''
         figure=demographic_heatmap(heatmap_unique_demographics[0])
     ),
     html.H4("Interpretation"),
+    html.Div("""
+    Across the different categories, the heatmaps show that smoking disparity differ by group but remain consistent
+    over time for different states. Age related disparities seem consistent with most states showing values between 1-1.4 and 
+    some states occasionally showing higher peaks. Disparities related to employment are the most pronounced with states like Utah and Virginia
+    showing brighter regions through time. Income related disparities looked consistent from 2013-2020, and afterwards showing more gaps in disparity
+    across states and years. Mental health disparities are higher and largely distributed across states showing consistent differences between inviduals with and without
+    mental distress. Race and ethnicity disparities are the lowest and most stable and some isolated increases. Overall, these heatmaps indicate
+    the highest disparity over time through the states is seen in employment and income where the others comparatively are smaller and more stable across states. 
+    """),
+    # 5) Boxplot: Distribution of Smoking Prevalence by Focus Group
+    html.H3("Distribution of Smoking Prevalence by Focus Group"),
+    html.Div([
+        html.Label("Select Focus Group:", style={"fontSize":"14px"}),
+        dcc.Dropdown(
+            id="focus-group-dropdown",
+            options=[{'label': g, 'value': g} for g in heatmap_unique_demographics],
+            value=heatmap_unique_demographics[0],
+            clearable=False,
+            style={'width': '40%'},
+        ),
+    ],style={'marginTop': '30px'}),
+    dcc.Graph(
+        id="smoking-distribution-boxplot",
+        figure=smoking_distribution_boxplot(heatmap_unique_demographics[0])
+    ),
+    
+    html.H4("Interpretation"),
+    html.Div("""
+    Across the different categories, the box plot shows clear patterns in how smoking prevalence varies across focus groups.
+    By age, we see that young adults (18-24) typically range between 10-19%, while rates peak in the 25-44 around 17-25% then decrease
+    to 8-10%, for adults 65+. By employment, individuals who are unable to work or unemployed are seen with higher smoking prevalence rates
+    compared to employed adults and retired groups who have much lower rates. By income, those making <20000 show a median of 31%, and as salary
+    increases the median of prevalence decreases to around 15%, for high income individuals making >= 75000. By mental health, those with
+    severe mental distress show rates around 25-35%, compared to 13-20%, for mild distress and 11-16%, for no mental distress, decreasing smoking
+    prevalence rates as mental health improves. By race and ethnicity, AIAN populations reach the highest prevalence with 17-34%, with White, Black,
+    Hispanic, and Asian populations seeing a similar median of 15-17%. Overall, these distributions show that smoking prevalence is highest among
+    populations with socioeconomic disadvantages, mental distress and systemic disparities, while advantaged groups have lower rates.
+    """),
 
     
-html.H3('Predicting Smoking Disparity'),
+html.H3('Overall Conclusion'),
+html.Div("""
+The main insights derived across all analysis were that smoking disparities in the united states are shaped by socioeconomic and structural factors. There were several consistent patterns that emerged from the exploratory visualizations. One of the most influential demographic predictors of smoking disparity were income and employment status. Lower income adults (those making <$20000) and individuals who were unemployed or unable to work were consistently showing the highest disparity values sometimes exceeding 2.0. This indicated that individuals who fell into these groups were smoking double the rate of the comparison groups. On the other side the lowest disparities were seen by high income adults (those making >=$75000), retirees, and homemakers/students showing more stable smoking patterns. Gaps regarding to age were present but not large, the highest differences appeared in adults from 25-44, and smaller gaps were seen in adults 65+. Through our analysis it was highlighted how mental health can impact smoking rates. Mental health related disparities were high for individuals experiencing severe distress and decreased as mental stress decreased. Race and ethnicity showed the smallest disparity which was interpreted as socioeconomic and health status differences playing a larger role that just race in driving smoking gaps.
+The patterns observed in the geographic plots helped support these findings. Some states displayed lower smoking disparity values across different groups while other showed more spikes and variability. The heatmaps demonstrate that while some states have increases in disparity over the years overall patterns remain stable over time with each focus group. Additionally, the correlation matrix further confirmed that unemployment, inability to work, low income and severe mental distress were the strongest corresponding to high disparity values.
+Together all analyses show that smoking disparities are driven the most by socioeconomic and health status. These findings suggest that programs like smoking-cessation should prioritize low-income populations, individuals struggling with employment, and those experiencing mental distress as these were the groups that showed the greatest disparity across states and over time.
+"""),
 
 html.Div([html.Label('Focus Group'), dcc.Dropdown(
     id='focus-group-input', 
@@ -271,6 +315,13 @@ html.Div(id='prediction-output'),
 )
 def update_heatmap(selected_demographic):
     return demographic_heatmap(selected_demographic)
+
+@app.callback(
+    Output('smoking-distribution-boxplot', 'figure'),
+    Input('focus-group-dropdown', 'value')
+)
+def update_boxplot(selected_focus_group):
+    return smoking_distribution_boxplot(selected_focus_group)
 
 @app.callback(
     Output('prediction-output', 'children'),

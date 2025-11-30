@@ -273,6 +273,10 @@ The patterns observed in the geographic plots helped support these findings. Som
 Together all analyses show that smoking disparities are driven the most by socioeconomic and health status. These findings suggest that programs like smoking-cessation should prioritize low-income populations, individuals struggling with employment, and those experiencing mental distress as these were the groups that showed the greatest disparity across states and over time.
 """),
 
+html.P(
+    "We chose to use a Random Forest model instead of Linear Regression because "
+    "the Random Forest achieved a lower Mean Squared Error (MSE), making it a better fit for predictions "
+),
 html.Div([html.Label('Focus Group'), dcc.Dropdown(
     id='focus-group-input', 
     options=[{'label':g, 'value':g} for g in focus_groups],

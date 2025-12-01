@@ -19,24 +19,13 @@ from diagrams.diagram5 import smoking_distribution_boxplot
 app = dash.Dash(__name__)
 server = app.server
 
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
-
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-
-df2 = pd.read_csv('data/data.csv')
 df3 = pd.read_csv('data/cleaned_data.csv')
 heatmap_unique_demographics = sorted(df3['demographic'].unique())
 
-fig2 = px.scatter(df2, x="gdp per capita", y="life expectancy",
-                 size="population", color="continent", hover_name="country",
-                 log_x=True, size_max=60)
 
 app.layout = html.Div([
+    html.H1("Final Project"),
+    html.H3("by Julia Woeste, Martin Bauer, Dezi Harris, Chante Goss, Krutika Patil"),
 
 #Does income influence the average smoking disparity value? 
     dcc.Graph(
@@ -52,6 +41,8 @@ app.layout = html.Div([
         The highest income group (>=$75000) had the lowest smoking disparity throughout 2011 to 2023 remaining between 0.41 to 0.68. However unlike the other income groups, in 2020 there was a decrease in average smoking disparity value, which may indicate stronger resilience to pandemic-related pressures.
         Overall, the trend from 2011 to 2023 shows that adults with lower income had substantially higher smoking disparity values, while those with higher income had the lowest, suggesting smoking-related outcomes are strongly tied to socioeconomic status.
     '''),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
 
 #Which states, overall, have the smallest smoking disparity across all demographic groups and all years? 
@@ -71,6 +62,8 @@ app.layout = html.Div([
         These lower disparity levels may reflect more uniform access to public health resources, fewer socioeconomic divides, or more consistent tobacco-related risk factors within these states.
         Overall, these states represent the top ten in the United States with the lowest average smoking disparity values, demonstrating more equitable smoking outcomes and smaller gaps between focus groups and reference groups across demographic categories.
     '''), 
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
 # What is the distribution of smoker prevalence across all demographics from 2011–2023?
 
@@ -86,6 +79,8 @@ html.Div('''
     increase in the percentages of 5–14.99%, and a decrease in the 15–19.9%. This would mean that within the past 
     few years we have seen an overall decrease in the amount of smokers across all of the focus groups.
 '''),
+html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
 # How has smoking disparity changed between 'High Distress' and 'No Distress' mental groups across states from 2011–2023?
 
@@ -102,28 +97,8 @@ html.Div('''
     One could begin to theorize whether the time off from work during quarantine could have contributed to the 
     narrowing of disparity between these two mental-health groups.
 '''),
+html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
 
-
-
-    # html.H1('Hello'),
-
-    # html.Div('''
-    #     Dash: A web application framework for your data. 
-    # '''),
-
-    # dcc.Graph(
-    #     id='example-graph',
-    #     figure=fig
-    # ),
-
-    # html.Div('''
-    #     Dash: Another example for chart
-    # '''),
-
-    # dcc.Graph(
-    #     id='example-graph2',
-    #     figure=fig2
-    # )
 
     html.H2("Smoking Disparities Across Demographic Groups"),
 
@@ -147,6 +122,8 @@ html.Div('''
         big or dramatic — for the most part looks like these disparities have been hanging around rather than getting much 
         better or worse.
     """),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
     # 2) Bar chart: overall average disparity by demographic
     dcc.Graph(
@@ -166,6 +143,8 @@ html.Div('''
     fall into. The racial and ethnic differences exist, but they’re not nearly as big in this dataset. If anything, it makes one think 
     public health programs might get more traction by focusing on unemployed folks, lower-income groups, and some age categories where the gap is clearly wider.
     """),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
 
     # 3) Bar chart: top ten groups by average disparity
@@ -191,6 +170,8 @@ html.Div('''
     income group (+$75K), people aged 65+, and Homemakers/students. This makes sense that these people have lower average smoking disparity
     given that people are who retired or are older tend to think more about their health than younger or poorer people.
     """),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
     # 5) Correlation Matrix: which categories are strongly correlated with each other?
     dcc.Graph(
@@ -209,6 +190,8 @@ html.Div('''
         Lower income groups in the reference population seem to be associated with smaller disparities, as a result of higher 
         smoking rates. In contrast, higher-income focus groups tend to have lower disparities.
     """),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
     #4) Heatmap: State vs Year with Demographic dropdown
     html.H3("State vs Year by Demographic Disparity Heatmap"),
     html.Div([
@@ -235,6 +218,8 @@ html.Div('''
     mental distress. Race and ethnicity disparities are the lowest and most stable and some isolated increases. Overall, these heatmaps indicate
     the highest disparity over time through the states is seen in employment and income where the others comparatively are smaller and more stable across states. 
     """),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
     # 5) Boxplot: Distribution of Smoking Prevalence by Focus Group
     html.H3("Distribution of Smoking Prevalence by Focus Group"),
     html.Div([
@@ -264,6 +249,8 @@ html.Div('''
     Hispanic, and Asian populations seeing a similar median of 15-17%. Overall, these distributions show that smoking prevalence is highest among
     populations with socioeconomic disadvantages, mental distress and systemic disparities, while advantaged groups have lower rates.
     """),
+    html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
     
 html.H3('Overall Conclusion'),
@@ -272,6 +259,8 @@ The main insights derived across all analysis were that smoking disparities in t
 The patterns observed in the geographic plots helped support these findings. Some states displayed lower smoking disparity values across different groups while other showed more spikes and variability. The heatmaps demonstrate that while some states have increases in disparity over the years overall patterns remain stable over time with each focus group. Additionally, the correlation matrix further confirmed that unemployment, inability to work, low income and severe mental distress were the strongest corresponding to high disparity values.
 Together all analyses show that smoking disparities are driven the most by socioeconomic and health status. These findings suggest that programs like smoking-cessation should prioritize low-income populations, individuals struggling with employment, and those experiencing mental distress as these were the groups that showed the greatest disparity across states and over time.
 """),
+html.Hr(style={'borderTop': '2px solid #ccc', 'margin': '40px 0'}),
+
 
 html.P(
     "We chose to use a Random Forest model instead of Linear Regression because "

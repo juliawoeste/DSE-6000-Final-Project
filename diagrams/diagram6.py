@@ -32,7 +32,7 @@ def facet_line_disparity_by_demographic():
         title="Average Smoking Disparity Over Time by Demographic Group",
         labels={
             "year": "Year",
-            "disparity_value_num": "Average Smoking Disparity (Disparity Value)",
+            "disparity_value_num": "Average Smoking Disparity",
             "demographic": "Demographic Group",
         },
     )
@@ -40,11 +40,15 @@ def facet_line_disparity_by_demographic():
     # Make layout clean and readable
     fig.update_layout(
         hovermode="x unified",
-        margin=dict(l=40, r=40, t=80, b=40),
+        margin=dict(l=120, r=40, t=140, b=40),   # increased left margin
     )
 
-    # Cleaner facet titles & yearly ticks
+    fig.update_yaxes(title_standoff=20)
+
+
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-    fig.update_xaxes(dtick=1)
+
+    fig.for_each_yaxis(lambda y: y.update(title=''))
+    fig.layout.yaxis.title.text = "Average Smoking Disparity"
 
     return fig

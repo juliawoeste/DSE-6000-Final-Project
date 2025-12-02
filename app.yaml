@@ -1,4 +1,4 @@
-runtime: python313
+runtime: python311
 
 basic_scaling:
   max_instances: 2
